@@ -7,7 +7,6 @@ import com.teledermatology.patient.bean.response.ImageUploadResponse;
 import com.teledermatology.patient.bean.response.PastAppointmentResponse;
 import com.teledermatology.patient.service.serviceInterface.PatientService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,4 +64,6 @@ public class PatientController {
                 .contentType(MediaType.valueOf("image/png"))
                 .body(image);
     }
+
+
 }

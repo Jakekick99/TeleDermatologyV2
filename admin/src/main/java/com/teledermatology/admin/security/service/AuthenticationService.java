@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final DoctorRepository patientRepository;
+    private final DoctorRepository doctorRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -27,9 +27,9 @@ public class AuthenticationService {
                 .lname(registerRequest.getLname())
                 .email(registerRequest.getEmail())
                 .pass(passwordEncoder.encode(registerRequest.getPass()))
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
-        patientRepository.save(doctor);
+        doctorRepository.save(doctor);
         String jwt_token = jwtService.generateToken(doctor);
         return AuthenticationResponse.builder()
                 .token(jwt_token)
@@ -48,7 +48,7 @@ public class AuthenticationService {
         catch(Exception e){
             System.out.println(e);
         }
-        DoctorEntity doctor = patientRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
+        DoctorEntity doctor = doctorRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
         String jwt_token = jwtService.generateToken(doctor);
         return AuthenticationResponse.builder()
                 .token(jwt_token)

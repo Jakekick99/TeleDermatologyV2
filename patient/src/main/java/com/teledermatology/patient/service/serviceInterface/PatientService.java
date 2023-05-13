@@ -14,4 +14,6 @@ public interface PatientService {
     Integer uploadImage(MultipartFile file);
 
     byte[] viewImage(Integer aid);
+
+    List<PastAppointmentResponse> getPendingAppointments();
 }

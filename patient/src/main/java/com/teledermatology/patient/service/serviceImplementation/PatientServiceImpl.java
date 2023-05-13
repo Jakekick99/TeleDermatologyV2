@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -61,5 +62,24 @@ public class PatientServiceImpl implements PatientService {
         Optional<ImageEntity> blob = imageRepository.findByAid(aid);
         byte[] image = ImageUtil.decompressImage(blob.get().getImagedata());
         return image;
+    }
+
+    public List<PastAppointmentResponse> getPendingAppointments(){
+        List<Appointment> appointmentList = appointmentRepository.getAppointmentByStatus("Pending").orElse(null);
+        if(appointmentList==null){
+            return null;
+        }
+        List<PastAppointmentResponse> pastAppointmentResponseList = new ArrayList<>();
+        for(Appointment appointment : appointmentList){
+            pastAppointmentResponseList.add(new PastAppointmentResponse(
+                    appointment.getCreatedate(),
+                    appointment.getMldiagnosis(),
+                    appointment.getDocdiagnosis(),
+                    appointment.getPcomments(),
+                    appointment.getDcomments(),
+                    appointment.getAid(),
+                    appointment.getStatus()));
+        }
+        return pastAppointmentResponseList;
     }
 }

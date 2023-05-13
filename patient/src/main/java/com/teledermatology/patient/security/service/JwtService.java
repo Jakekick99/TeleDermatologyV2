@@ -17,12 +17,12 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "753778214125442A472D4B614E645267556B58703273357638792F423F452848";
-    public String extractUsername(String token){
+    private static final String SECRET_KEY = "66546A576E5A7234753777217A25432A462D4A614E645267556B587032733576\n";
+    public String extractUsername(String token) throws SecurityException{
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Claims extractAllClaims(String token){
+    public Claims extractAllClaims(String token) throws SecurityException{
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -34,7 +34,7 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) throws SecurityException{
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -56,8 +56,16 @@ public class JwtService {
     }
 
     public Boolean isTokenValid(String token, UserDetails userDetails){
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        try{
+            final String username = extractUsername(token);
+            return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        }
+        catch (Exception e){
+            System.out.println("Trying to login with a JWT token of another account:\n\n"+e);
+            return false;
+        }
+
+
     }
 
     public Boolean isTokenExpired(String token){
