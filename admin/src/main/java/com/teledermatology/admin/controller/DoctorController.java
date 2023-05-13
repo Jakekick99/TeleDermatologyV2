@@ -1,5 +1,6 @@
 package com.teledermatology.admin.controller;
 
+import com.teledermatology.admin.bean.model.DiagnoseRequest;
 import com.teledermatology.admin.bean.response.ImageResponse;
 import com.teledermatology.admin.bean.response.PendingAppointmentsResponse;
 import com.teledermatology.admin.service.serviceImplementation.ImageUtil;
@@ -43,6 +44,16 @@ public class DoctorController {
             return ResponseEntity.ok()
                     .contentType(MediaType.valueOf("image/png"))
                     .body(image);
+        }
+    }
+
+    @PostMapping("/diagnose")
+    public ResponseEntity diagnose(@RequestBody DiagnoseRequest diagnoseRequest){
+        if(doctorService.diagnose(diagnoseRequest)==0){
+            return ResponseEntity.ok("Diagnosis stored successfully");
+        }
+        else{
+            return ResponseEntity.ok("Failed to store diagnosis");
         }
     }
 }

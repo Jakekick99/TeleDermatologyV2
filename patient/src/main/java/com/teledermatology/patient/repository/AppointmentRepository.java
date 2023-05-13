@@ -16,4 +16,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     List<PastAppointmentResponse> getPastAppointments(@Param("pid") String pid);
 
     Optional<List<Appointment>> getAppointmentByStatus(String status);
+
 }

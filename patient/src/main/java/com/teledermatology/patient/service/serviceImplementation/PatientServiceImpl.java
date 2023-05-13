@@ -2,6 +2,7 @@ package com.teledermatology.patient.service.serviceImplementation;
 
 import com.teledermatology.patient.bean.entity.Appointment;
 import com.teledermatology.patient.bean.entity.ImageEntity;
+import com.teledermatology.patient.bean.model.DiagnoseRequest;
 import com.teledermatology.patient.bean.response.PastAppointmentResponse;
 import com.teledermatology.patient.repository.AppointmentRepository;
 import com.teledermatology.patient.repository.ImageRepository;
@@ -86,5 +87,21 @@ public class PatientServiceImpl implements PatientService {
                     appointment.getStatus()));
         }
         return pastAppointmentResponseList;
+    }
+
+    @Override
+    public Integer diagnose(DiagnoseRequest diagnoseRequest) {
+        Appointment appointment = appointmentRepository.findById(Integer.valueOf(diagnoseRequest.getAid())).orElse(null);
+        if(appointment!=null){
+            appointment.setDcomments(diagnoseRequest.getDcomments());
+            appointment.setDocdiagnosis(diagnoseRequest.getDocdiagnosis());
+            appointment.setStatus(diagnoseRequest.getStatus());
+            appointmentRepository.save(appointment);
+            return 0;
+        }
+        else{
+            System.out.println("--LOGGING--\nNo appointment matching provided appointment ID");
+            return 1;
+        }
     }
 }

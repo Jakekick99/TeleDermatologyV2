@@ -1,9 +1,11 @@
 package com.teledermatology.admin.service.serviceImplementation;
 
+import com.teledermatology.admin.bean.model.DiagnoseRequest;
 import com.teledermatology.admin.bean.model.ViewImageRequest;
 import com.teledermatology.admin.bean.response.ImageResponse;
 import com.teledermatology.admin.bean.response.PendingAppointmentsResponse;
 import com.teledermatology.admin.service.serviceInterface.DoctorService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -42,7 +44,6 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public ImageResponse getImage(String aid) {
         HttpEntity<?> request = new HttpEntity<>("");
-        System.out.println("The body of the request is:"+request.getBody());
         String url="/doctor/view-image/"+aid;
         ResponseEntity<ImageResponse> response = restTemplate_patient.exchange(url, HttpMethod.GET, request, new ParameterizedTypeReference<ImageResponse>(){},"");
         if(response.getStatusCode().isSameCodeAs(HttpStatus.NOT_FOUND)){
@@ -50,6 +51,19 @@ public class DoctorServiceImpl implements DoctorService {
         }
         else{
             return response.getBody();
+        }
+    }
+
+    @Override
+    public Integer diagnose(DiagnoseRequest diagnoseRequest) {
+        HttpEntity<?> request = new HttpEntity<>(diagnoseRequest);
+        String url="/doctor/diagnose";
+        ResponseEntity response= restTemplate_patient.postForEntity(url,request, ResponseEntity.class,"");
+        if(response.getStatusCode().isSameCodeAs(HttpStatus.OK)){
+            return 0;
+        }
+        else{
+            return -1;
         }
     }
 }
