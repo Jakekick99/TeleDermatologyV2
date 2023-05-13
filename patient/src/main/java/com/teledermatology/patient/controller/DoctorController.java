@@ -1,13 +1,14 @@
 package com.teledermatology.patient.controller;
 
+import com.teledermatology.patient.bean.entity.ImageEntity;
+import com.teledermatology.patient.bean.model.ViewImageRequest;
 import com.teledermatology.patient.bean.response.PastAppointmentResponse;
 import com.teledermatology.patient.service.serviceInterface.PatientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +21,6 @@ public class DoctorController {
     private final PatientService patientService;
     @GetMapping("/get-pending-appointments")
     public ResponseEntity getPendingAppointments(){
-        System.out.println("request reached here");
         List<PastAppointmentResponse> pastAppointmentResponseList= patientService.getPendingAppointments();
         if(isNull(pastAppointmentResponseList)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -28,5 +28,14 @@ public class DoctorController {
         else{
             return ResponseEntity.ok(pastAppointmentResponseList);
         }
+    }
+
+    @GetMapping("/view-image/{aid}")
+    public ResponseEntity fetchImage(@PathVariable String aid){
+        ImageEntity image = patientService.fetchImage(Integer.valueOf(aid));
+        if(isNull(image)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(image);
     }
 }

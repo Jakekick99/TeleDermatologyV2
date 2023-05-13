@@ -1,6 +1,6 @@
 package com.teledermatology.admin.service.serviceImplementation;
 
-import com.teledermatology.admin.bean.model.ImageRequest;
+import com.teledermatology.admin.bean.model.ViewImageRequest;
 import com.teledermatology.admin.bean.response.ImageResponse;
 import com.teledermatology.admin.bean.response.PendingAppointmentsResponse;
 import com.teledermatology.admin.service.serviceInterface.DoctorService;
@@ -25,7 +25,6 @@ public class DoctorServiceImpl implements DoctorService {
 
     public DoctorServiceImpl(@Value("${patient_service.base.url}"+"/api/v1")String patientBaseURL, RestTemplateBuilder builder) {
         this.restTemplate_patient= builder.rootUri(patientBaseURL).build();
-        System.out.println(patientBaseURL);
     }
 
     public List<PendingAppointmentsResponse> getPendingAppointments(){
@@ -42,8 +41,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public ImageResponse getImage(String aid) {
-        HttpEntity<?> request = new HttpEntity<>(new ImageRequest(aid));
-        String url="/patient/view-image";
+        HttpEntity<?> request = new HttpEntity<>("");
+        System.out.println("The body of the request is:"+request.getBody());
+        String url="/doctor/view-image/"+aid;
         ResponseEntity<ImageResponse> response = restTemplate_patient.exchange(url, HttpMethod.GET, request, new ParameterizedTypeReference<ImageResponse>(){},"");
         if(response.getStatusCode().isSameCodeAs(HttpStatus.NOT_FOUND)){
             return null;

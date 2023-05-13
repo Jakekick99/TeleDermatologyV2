@@ -64,6 +64,11 @@ public class PatientServiceImpl implements PatientService {
         return image;
     }
 
+    @Override
+    public ImageEntity fetchImage(Integer aid) {
+        return imageRepository.findByAid(aid).orElse(null);
+    }
+
     public List<PastAppointmentResponse> getPendingAppointments(){
         List<Appointment> appointmentList = appointmentRepository.getAppointmentByStatus("Pending").orElse(null);
         if(appointmentList==null){

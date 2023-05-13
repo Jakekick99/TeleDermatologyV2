@@ -7,10 +7,7 @@ import com.teledermatology.admin.service.serviceInterface.DoctorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,7 +33,7 @@ public class DoctorController {
     }
 
     @GetMapping("/view-appointment-details/{aid}")
-    public ResponseEntity viewAppointmentDetails(@RequestParam String aid){
+    public ResponseEntity viewAppointmentDetails(@PathVariable String aid){
         ImageResponse imageResponse = doctorService.getImage(aid);
         if(imageResponse == null){
             return ResponseEntity.ok("Not a valid appointment");
