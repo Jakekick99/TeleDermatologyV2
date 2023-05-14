@@ -5,9 +5,7 @@ import com.teledermatology.admin.security.model.AuthenticationResponse;
 import com.teledermatology.admin.security.model.RegisterRequest;
 import com.teledermatology.admin.security.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,24 +14,37 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
-    private ResponseEntity sendResponse(AuthenticationResponse authenticationResponse){
+    private ResponseEntity sendResponse(AuthenticationResponse authenticationResponse, int status){
         ResponseCookie cookie = ResponseCookie.from("token", authenticationResponse.getToken())
                 .path("/")
                 .httpOnly(true)
                 //.secure(true) //set true when working with browser, set false when working with postman
                 .maxAge(86400)
                 .build();
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(authenticationResponse);
+        if(status == 0){
+            return ResponseEntity
+                    .ok()
+                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                    .body(authenticationResponse);
+        }
+        else{
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(authenticationResponse);
+        }
+
     }
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest){
         AuthenticationResponse authenticationResponse = authenticationService.register(registerRequest);
         System.out.println("Logging Registration");
         //return ResponseEntity.ok(authenticationResponse);
-        return sendResponse(authenticationResponse);
+        if(!authenticationResponse.getToken().equals("FAILED TO LOGIN")){
+            return sendResponse(authenticationResponse,0);
+        }
+        else{
+            return sendResponse(authenticationResponse,-1);
+        }
     }
 
     @PostMapping("/authenticate")
@@ -41,7 +52,12 @@ public class AuthenticationController {
         AuthenticationResponse authenticationResponse = authenticationService.authenticate(authenticationRequest);
         System.out.println("Logging Authentication");
         //return ResponseEntity.ok(authenticationResponse);
-        return sendResponse(authenticationResponse);
+        if(!authenticationResponse.getToken().equals("FAILED TO LOGIN")){
+            return sendResponse(authenticationResponse,0);
+        }
+        else{
+            return sendResponse(authenticationResponse,-1);
+        }
     }
 
     @GetMapping("/logout")

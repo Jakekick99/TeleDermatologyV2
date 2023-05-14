@@ -35,6 +35,7 @@ public class AuthenticationService {
         String jwt_token = jwtService.generateToken(patient);
         return AuthenticationResponse.builder()
                 .token(jwt_token)
+                .pid(patient.getPid())
                 .build();
     }
 
@@ -49,11 +50,16 @@ public class AuthenticationService {
         }
         catch(Exception e){
             System.out.println(e);
+            return AuthenticationResponse.builder()
+                    .token("FAILED TO LOGIN")
+                    .pid("FAILED TO LOGIN")
+                    .build();
         }
         PatientEntity patient = patientRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
         String jwt_token = jwtService.generateToken(patient);
         return AuthenticationResponse.builder()
                 .token(jwt_token)
+                .pid(patient.getPid())
                 .build();
     }
 }

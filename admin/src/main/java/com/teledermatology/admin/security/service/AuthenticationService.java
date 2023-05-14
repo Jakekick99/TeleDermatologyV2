@@ -33,6 +33,7 @@ public class AuthenticationService {
         String jwt_token = jwtService.generateToken(doctor);
         return AuthenticationResponse.builder()
                 .token(jwt_token)
+                .did(doctor.getDid())
                 .build();
     }
 
@@ -47,11 +48,16 @@ public class AuthenticationService {
         }
         catch(Exception e){
             System.out.println(e);
+            return AuthenticationResponse.builder()
+                    .token("FAILED TO LOGIN")
+                    .did("FAILED TO LOGIN")
+                    .build();
         }
         DoctorEntity doctor = doctorRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
         String jwt_token = jwtService.generateToken(doctor);
         return AuthenticationResponse.builder()
                 .token(jwt_token)
+                .did(doctor.getDid())
                 .build();
     }
 }
