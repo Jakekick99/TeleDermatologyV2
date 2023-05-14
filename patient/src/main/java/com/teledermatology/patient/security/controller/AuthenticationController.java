@@ -22,6 +22,7 @@ public class AuthenticationController {
 
     private ResponseEntity sendResponse(AuthenticationResponse authenticationResponse){
         ResponseCookie cookie = ResponseCookie.from("token", authenticationResponse.getToken())
+                .domain("localhost")
                 .path("/")
                 .httpOnly(true)
                 //.secure(true) //set true when working with browser, set false when working with postman
