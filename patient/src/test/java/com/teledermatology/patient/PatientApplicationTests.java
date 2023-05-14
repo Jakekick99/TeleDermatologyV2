@@ -45,7 +45,7 @@ class PatientApplicationTests {
 	@Test
 	void testAppointmentDetails() {
 		List<PastAppointmentResponse> appointmentList = appointmentRepository.getPastAppointments("0");
-		assertEquals("0", appointmentList.get(0).getAid());
+		assertEquals(0, appointmentList.get(0).getAid());
 		assertEquals("status", appointmentList.get(0).getStatus());
 		assertEquals("doctor comment", appointmentList.get(0).getDcomments());
 		assertEquals("doctor diagnosis", appointmentList.get(0).getDocdiagnosis());
