@@ -26,8 +26,8 @@ public class PatientController {
     }
 
     @GetMapping("/past-appointments")
-    public ResponseEntity getPastAppointments(@RequestBody PastAppointmentRequest pastAppointmentRequest){
-        List<PastAppointmentResponse> pastAppointmentResponseList = patientService.getPastAppointments(pastAppointmentRequest.getPid());
+    public ResponseEntity getPastAppointments(@RequestParam("pid") String pid){
+        List<PastAppointmentResponse> pastAppointmentResponseList = patientService.getPastAppointments(pid);
         if(pastAppointmentResponseList.isEmpty()){
             return ResponseEntity.ok("Empty no data");
         }
