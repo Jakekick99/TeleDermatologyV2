@@ -57,13 +57,19 @@ public class PatientController {
         }
     }
 
-    @GetMapping("/view-image")
-    public ResponseEntity viewImage(@RequestBody ViewImageRequest viewImageRequest){
-        byte[] image = patientService.viewImage(Integer.valueOf(viewImageRequest.getAid()));
+//    @GetMapping("/view-image")
+//    public ResponseEntity viewImage(@RequestBody ViewImageRequest viewImageRequest){
+//        byte[] image = patientService.viewImage(Integer.valueOf(viewImageRequest.getAid()));
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.valueOf("image/png"))
+//                .body(image);
+//    }
+        @GetMapping("/view-image")
+        public ResponseEntity viewImage(@RequestParam("aid") String aid){
+        byte[] image = patientService.viewImage(Integer.valueOf(aid));
         return ResponseEntity.ok()
-                .contentType(MediaType.valueOf("image/png"))
+                .contentType(MediaType.valueOf("image/jpeg"))
                 .body(image);
     }
-
 
 }

@@ -35,6 +35,7 @@ public class PatientServiceImpl implements PatientService {
         appointment.setCreatedate(new Date());
         try{
             appointmentRepository.save(appointment);
+            System.out.println("HI There");
         }
         catch(Exception e){
             System.out.println("Exception in saving appointment:\n\n"+e);
