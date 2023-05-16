@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-class PatientApplicationTests {
+class 	PatientApplicationTests {
 	@Autowired
 	AppointmentRepository appointmentRepository;
 	@Autowired
